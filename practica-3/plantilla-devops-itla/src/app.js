@@ -47,6 +47,19 @@ function createApp() {
     res.json(tarea);
   });
 
+  // Endpoint para eliminar una tarea por su ID
+  app.delete('/api/tareas/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const index = tareas.findIndex(t => t.id === id);
+
+    if (index === -1) {
+      return res.status(404).json({ error: 'Tarea no encontrada' });
+    }
+
+    const tareaEliminada = tareas.splice(index, 1);
+    res.json({ mensaje: 'Tarea eliminada', tarea: tareaEliminada[0] });
+  });
+
   return app;
 }
 
