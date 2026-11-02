@@ -69,3 +69,14 @@ docker run -p 3000:3000 tareas-devops
 - Análisis estático real (ESLint) y umbral de cobertura mínima.
 - Monitoreo: usar `/metrics` y los logs JSON; definir al menos una **alerta** (ej. errores > 0).
 - Documentar: guía de instalación, manual de operaciones y lecciones aprendidas.
+
+## Explicación de las etapas del Pipeline (CI/CD)
+
+El pipeline de integración y despliegue continuo está automatizado mediante GitHub Actions (`.github/workflows/ci.yml`) y consta de las siguientes fases:
+
+1. **Checkout del Código (`actions/checkout@v4`):** Clona el repositorio en un entorno virtual limpio con Ubuntu proporcionado por los runners de GitHub para obtener la última versión del código fuente.
+2. **Configuración de Node.js (`actions/setup-node@v4`):** Instala y configura la versión de Node.js requerida (versión 20) para asegurar la compatibilidad con la aplicación Express.
+3. **Instalación de Dependencias (`npm install`):** Descarga e instala todos los paquetes y módulos necesarios definidos en el archivo `package.json` (como Express, Supertest y Jest).
+4. **Ejecución de Pruebas y Cobertura (`npm test`):** Ejecuta la suite de pruebas unitarias e de integración utilizando Jest, validando el correcto funcionamiento de los endpoints de la API (`GET`, `POST`, `PATCH`, `DELETE`) y generando el reporte de cobertura de código.
+5. **Construcción de la Imagen Docker (`docker build`):** Empaqueta la aplicación en un contenedor optimizado para producción utilizando el `Dockerfile` del proyecto.
+6. **Despliegue Automático a GitHub Pages:** Publica de forma estática la interfaz web de la aplicación (`public/index.html`) para que esté accesible de manera pública y gratuita en la web.
